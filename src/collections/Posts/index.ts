@@ -26,6 +26,7 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from 'payload'
+import { slugify as translit } from 'transliteration'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -214,7 +215,21 @@ export const Posts: CollectionConfig<'posts'> = {
         },
       ],
     },
-    slugField(),
+    slugField({
+      name: 'slug',
+      fieldToUse: 'title',
+      useAsSlug: 'slug',
+      required: true,
+      position: 'sidebar',
+      slugify: ({ valueToSlugify }) => {
+        if (typeof valueToSlugify !== 'string') return undefined
+
+        return translit(valueToSlugify)
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^\w-]+/g, '')
+      },
+    }),
   ],
   hooks: {
     afterChange: [revalidatePost],
