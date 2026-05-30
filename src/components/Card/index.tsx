@@ -32,14 +32,21 @@ export const Card: React.FC<{
   return (
     <article
       className={cn(
-        'border border-border rounded-lg overflow-hidden bg-card hover:cursor-pointer',
+        'border border-border rounded-lg overflow-hidden bg-card group hover:cursor-pointer hover:shadow-lg hover:-translate-y-0.5 duration-500',
         className,
       )}
       ref={card.ref}
     >
       <div className="relative w-full ">
         {!metaImage && <div className="">No image</div>}
-        {metaImage && typeof metaImage !== 'string' && <Media resource={metaImage} size="33vw" />}
+        {metaImage && typeof metaImage !== 'string' && (
+          <Media
+            imgClassName="object-cover max-h-50 group-hover:scale-102 duration-500"
+            className=""
+            resource={metaImage}
+            size="20vw"
+          />
+        )}
       </div>
       <div className="p-4">
         {showCategories && hasCategories && (
@@ -67,13 +74,17 @@ export const Card: React.FC<{
         {titleToUse && (
           <div className="prose">
             <h3>
-              <Link className="not-prose" href={href} ref={link.ref}>
+              <Link className="not-prose line-clamp-3" href={href} ref={link.ref}>
                 {titleToUse}
               </Link>
             </h3>
           </div>
         )}
-        {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}
+        {description && (
+          <div className="mt-2">
+            {description && <p className="line-clamp-4">{sanitizedDescription}</p>}
+          </div>
+        )}
       </div>
     </article>
   )
