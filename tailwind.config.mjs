@@ -12,22 +12,12 @@ const config = {
                 fontWeight: 'normal',
                 marginBottom: '0.25em',
               },
-            },
-          ],
-        },
-        base: {
-          css: [
-            {
-              h1: {
-                fontSize: '2.5rem',
-              },
-              h2: {
+              h3: {
                 fontSize: '1.25rem',
                 fontWeight: 600,
+                lineHeight: '1.2',
               },
             },
-          ],
-        },
         md: {
           css: [
             {
