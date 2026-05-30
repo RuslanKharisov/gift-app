@@ -18,6 +18,9 @@ const config = {
                 lineHeight: '1.2',
               },
             },
+          ],
+        },
+
         md: {
           css: [
             {
