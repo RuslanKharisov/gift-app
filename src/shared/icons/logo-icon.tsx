@@ -51,8 +51,8 @@ const LogoIcon: FC<SVGProps<SVGSVGElement>> = (props) => {
           y2="133"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#8D37F1" />
-          <stop offset="1" stop-color="#D93375" />
+          <stop stopColor="#8D37F1" />
+          <stop offset="1" stopColor="#D93375" />
         </linearGradient>
       </defs>
     </svg>
