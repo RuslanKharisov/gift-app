@@ -39,6 +39,9 @@ export const ArchiveBlock: React.FC<
             },
           }
         : {}),
+      where: {
+        _status: { equals: 'published' },
+      },
     })
 
     posts = fetchedPosts.docs
