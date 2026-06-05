@@ -18,6 +18,7 @@ import { getServerSideURL } from '@/utilities/getURL'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
+  const analyticsEnabled = !!(process.env.NODE_ENV === 'production')
 
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
@@ -38,6 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {children}
           <Footer />
         </Providers>
+        <YandexMetrikaContainer enabled={analyticsEnabled} />
       </body>
     </html>
   )
