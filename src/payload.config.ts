@@ -15,6 +15,9 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 
+import { en } from '@payloadcms/translations/languages/en'
+import { ru } from '@payloadcms/translations/languages/ru'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -58,12 +61,17 @@ export default buildConfig({
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   db: postgresAdapter({
+    push: process.env.NODE_ENV !== 'production', //!!! Настройка для предотвращения записи изменений в базу в DEV режиме на Production сервере.
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
   collections: [Pages, Posts, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
+  i18n: {
+    supportedLanguages: { en, ru },
+    fallbackLanguage: 'en',
+  },
   globals: [Header, Footer],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
