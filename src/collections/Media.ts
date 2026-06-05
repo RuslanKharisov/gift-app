@@ -14,6 +14,13 @@ import { authenticated } from '../access/authenticated'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const WEBP_FORMAT_OPTIONS = {
+  format: 'webp',
+  options: {
+    quality: 85,
+  },
+} as const
+
 export const Media: CollectionConfig = {
   slug: 'media',
   folders: true,
@@ -48,33 +55,40 @@ export const Media: CollectionConfig = {
       {
         name: 'thumbnail',
         width: 300,
+        formatOptions: WEBP_FORMAT_OPTIONS,
       },
       {
         name: 'square',
         width: 500,
         height: 500,
+        formatOptions: WEBP_FORMAT_OPTIONS,
       },
       {
         name: 'small',
         width: 600,
+        formatOptions: WEBP_FORMAT_OPTIONS,
       },
       {
         name: 'medium',
         width: 900,
+        formatOptions: WEBP_FORMAT_OPTIONS,
       },
       {
         name: 'large',
         width: 1400,
+        formatOptions: WEBP_FORMAT_OPTIONS,
       },
       {
         name: 'xlarge',
         width: 1920,
+        formatOptions: WEBP_FORMAT_OPTIONS,
       },
       {
         name: 'og',
         width: 1200,
         height: 630,
         crop: 'center',
+        formatOptions: WEBP_FORMAT_OPTIONS,
       },
     ],
   },
