@@ -6,6 +6,7 @@ import { Logo } from '@/components/Logo/Logo'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { FolderInput } from 'lucide-react'
+import { getMenuLink } from '@/utilities/getMenuLink'
 
 type MobileNavProps = {
   data: HeaderType
@@ -47,21 +48,7 @@ export const MobileNav: React.FC<MobileNavProps> = memo(({ data, onClose }) => {
                   {/* Список ссылок с хорошим межстрочным интервалом */}
                   <div className="space-y-3 flex flex-col">
                     {col.links?.map((linkItem) => {
-                      let finalUrl = '#'
-
-                      if (
-                        linkItem.type === 'category' &&
-                        typeof linkItem.categoryRef === 'object'
-                      ) {
-                        const categoryObj = linkItem.categoryRef as Category
-                        if (categoryObj.breadcrumbs && categoryObj.breadcrumbs.length > 0) {
-                          finalUrl =
-                            categoryObj.breadcrumbs[categoryObj.breadcrumbs.length - 1].url || '#'
-                        }
-                      } else if (linkItem.type === 'custom') {
-                        finalUrl = linkItem.url || '#'
-                      }
-
+                      const finalUrl = getMenuLink(linkItem)
                       const isActive = pathname === finalUrl
 
                       return (

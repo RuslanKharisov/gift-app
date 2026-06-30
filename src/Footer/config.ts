@@ -40,6 +40,7 @@ export const Footer: GlobalConfig = {
               defaultValue: 'category',
               options: [
                 { label: 'Ссылка на Категорию сайта', value: 'category' },
+                { label: 'Ссылка на Страницу (Pages)', value: 'page' },
                 { label: 'Ввести вручную (кастомная URL)', value: 'custom' },
               ],
             },
@@ -51,6 +52,16 @@ export const Footer: GlobalConfig = {
               label: 'Выберите категорию из базы',
               admin: {
                 condition: (_, siblingData) => siblingData?.type === 'category',
+              },
+            },
+            {
+              name: 'pageRef',
+              type: 'relationship',
+              relationTo: 'pages',
+              required: true,
+              label: 'Выберите статическую страницу',
+              admin: {
+                condition: (_, siblingData) => siblingData?.type === 'page',
               },
             },
             {
