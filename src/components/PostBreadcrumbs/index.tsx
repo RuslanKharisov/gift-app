@@ -21,13 +21,15 @@ export const PostBreadcrumbs: React.FC<PostBreadcrumbsProps> = ({ post }) => {
   const categoryBreadcrumbs = mainCategory?.breadcrumbs || []
 
   return (
-    <Breadcrumb className="mb-6">
+    <Breadcrumb className="mb-6  relative z-10">
       <BreadcrumbList>
         {/* 1. Всегда выводим ссылку на Главную */}
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">Главная</BreadcrumbLink>
+          <BreadcrumbLink className="text-white/55" href="/">
+            Главная
+          </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator />
+        <BreadcrumbSeparator className="text-white/70" />
 
         {/* 2. Динамически выводим всю цепочку родительских категорий */}
         {categoryBreadcrumbs.map((crumb) => {
@@ -36,16 +38,20 @@ export const PostBreadcrumbs: React.FC<PostBreadcrumbsProps> = ({ post }) => {
           return (
             <React.Fragment key={crumb.id}>
               <BreadcrumbItem>
-                <BreadcrumbLink href={crumb.url}>{crumb.label}</BreadcrumbLink>
+                <BreadcrumbLink className="text-white/70" href={crumb.url}>
+                  {crumb.label}
+                </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator className="text-white/70" />
             </React.Fragment>
           )
         })}
 
         {/* 3. Последним элементом выводим заголовок самой статьи (некликабельный) */}
         <BreadcrumbItem>
-          <BreadcrumbPage className="max-w-50 truncate sm:max-w-none">{post.title}</BreadcrumbPage>
+          <BreadcrumbPage className="text-white/50 max-w-50 truncate sm:max-w-none">
+            {post.title}
+          </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
