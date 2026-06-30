@@ -1,4 +1,5 @@
 import type { Payload, PayloadRequest } from 'payload'
+import { seedProductCategories } from './seed-categories'
 
 export const seed = async ({
   payload,
@@ -7,7 +8,12 @@ export const seed = async ({
   payload: Payload
   req: PayloadRequest
 }): Promise<void> => {
-  payload.logger.info('Seeding database...')
+  payload.logger.info('Запущен скрипт seed базы данных...')
 
-  payload.logger.info('Seeded database successfully!')
+  await seedProductCategories({
+    payload,
+    req: _req,
+  })
+
+  payload.logger.info('✅ Seed завершён')
 }
