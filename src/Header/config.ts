@@ -1,6 +1,4 @@
 import type { GlobalConfig } from 'payload'
-
-import { link } from '@/fields/link'
 import { revalidateHeader } from './hooks/revalidateHeader'
 
 export const Header: GlobalConfig = {
@@ -10,20 +8,73 @@ export const Header: GlobalConfig = {
   },
   fields: [
     {
-      name: 'navItems',
+      name: 'navGroups',
       type: 'array',
+      label: 'Группы Мега-Меню',
       fields: [
-        link({
-          appearances: false,
-        }),
-      ],
-      maxRows: 6,
-      admin: {
-        initCollapsed: true,
-        components: {
-          RowLabel: '@/Header/RowLabel#RowLabel',
+        {
+          name: 'groupLabel',
+          type: 'text',
+          required: true,
+          label: 'Название вкладки (например: Подарки, Поводы)',
         },
-      },
+        {
+          name: 'columns',
+          type: 'array',
+          label: 'Колонки внутри мега-меню',
+          fields: [
+            {
+              name: 'columnTitle',
+              type: 'text',
+              label: 'Заголовок колонки',
+            },
+            {
+              name: 'links',
+              type: 'array',
+              label: 'Ссылки',
+              fields: [
+                // Начинается блок автоматической ссылки
+                {
+                  name: 'label',
+                  type: 'text',
+                  required: true,
+                  label: 'Текст ссылки (например: Женщине)',
+                },
+                {
+                  name: 'type',
+                  type: 'select',
+                  defaultValue: 'category',
+                  options: [
+                    { label: 'Ссылка на Категорию сайта', value: 'category' },
+                    { label: 'Ввести вручную (кастомная URL)', value: 'custom' },
+                  ],
+                },
+                // Если выбрано "category", показываем селектор из базы данных
+                {
+                  name: 'categoryRef',
+                  type: 'relationship',
+                  relationTo: 'categories',
+                  required: true,
+                  label: 'Выберите категорию из базы',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'category', //
+                  },
+                },
+                // Если выбрано "custom", даем ввести вручную
+                {
+                  name: 'url',
+                  type: 'text',
+                  required: true,
+                  label: 'Кастомный URL',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'custom', //
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
     },
   ],
   hooks: {
