@@ -1651,8 +1651,9 @@ export interface Header {
               links?:
                 | {
                     label: string;
-                    type?: ('category' | 'custom') | null;
+                    type?: ('category' | 'page' | 'custom') | null;
                     categoryRef?: (number | null) | Category;
+                    pageRef?: (number | null) | Page;
                     url?: string | null;
                     id?: string | null;
                   }[]
@@ -1678,8 +1679,9 @@ export interface Footer {
         links?:
           | {
               label: string;
-              type?: ('category' | 'custom') | null;
+              type?: ('category' | 'page' | 'custom') | null;
               categoryRef?: (number | null) | Category;
+              pageRef?: (number | null) | Page;
               url?: string | null;
               id?: string | null;
             }[]
@@ -1709,6 +1711,7 @@ export interface HeaderSelect<T extends boolean = true> {
                     label?: T;
                     type?: T;
                     categoryRef?: T;
+                    pageRef?: T;
                     url?: T;
                     id?: T;
                   };
@@ -1735,6 +1738,7 @@ export interface FooterSelect<T extends boolean = true> {
               label?: T;
               type?: T;
               categoryRef?: T;
+              pageRef?: T;
               url?: T;
               id?: T;
             };

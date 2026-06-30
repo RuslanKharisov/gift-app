@@ -5,6 +5,7 @@ import type { Header as HeaderType, Category } from '@/payload-types'
 import Link from 'next/link'
 import { SearchIcon, ChevronDown } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+import { getMenuLink } from '@/utilities/getMenuLink'
 
 type HeaderNavProps = {
   data: HeaderType
@@ -88,23 +89,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = memo(({ data }) => {
                       )}
                       <ul className="flex flex-col gap-2">
                         {col.links?.map((linkItem) => {
-                          let finalUrl = '#'
-
-                          if (
-                            linkItem.type === 'category' &&
-                            typeof linkItem.categoryRef === 'object'
-                          ) {
-                            const categoryObj = linkItem.categoryRef as Category
-
-                            if (categoryObj.breadcrumbs && categoryObj.breadcrumbs.length > 0) {
-                              finalUrl =
-                                categoryObj.breadcrumbs[categoryObj.breadcrumbs.length - 1].url ||
-                                '#'
-                            }
-                          } else if (linkItem.type === 'custom') {
-                            finalUrl = linkItem.url || '#'
-                          }
-
+                          const finalUrl = getMenuLink(linkItem)
                           const isActive = pathname === finalUrl
 
                           return (

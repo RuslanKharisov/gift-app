@@ -33,7 +33,6 @@ export const Header: GlobalConfig = {
               type: 'array',
               label: 'Ссылки',
               fields: [
-                // Начинается блок автоматической ссылки
                 {
                   name: 'label',
                   type: 'text',
@@ -46,10 +45,10 @@ export const Header: GlobalConfig = {
                   defaultValue: 'category',
                   options: [
                     { label: 'Ссылка на Категорию сайта', value: 'category' },
+                    { label: 'Ссылка на Страницу (Pages)', value: 'page' },
                     { label: 'Ввести вручную (кастомная URL)', value: 'custom' },
                   ],
                 },
-                // Если выбрано "category", показываем селектор из базы данных
                 {
                   name: 'categoryRef',
                   type: 'relationship',
@@ -57,17 +56,26 @@ export const Header: GlobalConfig = {
                   required: true,
                   label: 'Выберите категорию из базы',
                   admin: {
-                    condition: (_, siblingData) => siblingData?.type === 'category', //
+                    condition: (_, siblingData) => siblingData?.type === 'category',
                   },
                 },
-                // Если выбрано "custom", даем ввести вручную
+                {
+                  name: 'pageRef',
+                  type: 'relationship',
+                  relationTo: 'pages',
+                  required: true,
+                  label: 'Выберите статическую страницу',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'page',
+                  },
+                },
                 {
                   name: 'url',
                   type: 'text',
                   required: true,
                   label: 'Кастомный URL',
                   admin: {
-                    condition: (_, siblingData) => siblingData?.type === 'custom', //
+                    condition: (_, siblingData) => siblingData?.type === 'custom',
                   },
                 },
               ],
