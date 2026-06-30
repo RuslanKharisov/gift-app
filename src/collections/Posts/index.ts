@@ -33,6 +33,7 @@ import {
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from 'payload'
 import { slugify as translit } from 'transliteration'
+import { Prompt } from '@/blocks/Prompt/config'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -96,7 +97,7 @@ export const Posts: CollectionConfig<'posts'> = {
                   return [
                     ...rootFeatures,
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction] }),
+                    BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction, Prompt] }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),
