@@ -21,26 +21,51 @@ export const ArchiveBlock: React.FC<
   if (populateBy === 'collection') {
     const payload = await getPayload({ config: configPromise })
 
-    const flattenedCategories = categories?.map((category) => {
-      if (typeof category === 'object') return category.id
-      else return category
-    })
+    // 1. Собираем ID выбранных в админке категорий
+    const flattenedCategories =
+      categories?.map((category) => {
+        if (typeof category === 'object') return category.id
+        return category
+      }) || []
 
+    // Базовый фильтр: показывать только опубликованные посты
+    const whereConditions: any[] = [
+      {
+        _status: { equals: 'published' },
+      },
+    ]
+
+    // 2. Если категории выбраны, расширяем список за счет их "детей"
+    if (flattenedCategories.length > 0) {
+      const childCategories = await payload.find({
+        collection: 'categories',
+        where: {
+          parent: { in: flattenedCategories },
+        },
+        limit: 100,
+        pagination: false,
+        // select: { id: true },
+      })
+
+      const allCategoryIdsToSearch = [
+        ...flattenedCategories,
+        ...childCategories.docs.map((child) => child.id),
+      ]
+
+      whereConditions.push({
+        categories: {
+          in: allCategoryIdsToSearch,
+        },
+      })
+    }
+
+    // 3. Делаем правильный запрос, объединяя все условия через AND
     const fetchedPosts = await payload.find({
       collection: 'posts',
       depth: 1,
       limit,
-      ...(flattenedCategories && flattenedCategories.length > 0
-        ? {
-            where: {
-              categories: {
-                in: flattenedCategories,
-              },
-            },
-          }
-        : {}),
       where: {
-        _status: { equals: 'published' },
+        and: whereConditions,
       },
     })
 

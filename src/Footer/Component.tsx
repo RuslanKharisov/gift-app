@@ -1,31 +1,58 @@
-import { getCachedGlobal } from '@/utilities/getGlobals'
-import Link from 'next/link'
 import React from 'react'
-
-import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
-import { CMSLink } from '@/components/Link'
+import type { Footer as FooterType, Category } from '@/payload-types'
+import Link from 'next/link'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
 import { Logo } from '@/components/Logo/Logo'
 
 export async function Footer() {
-  const footerData = await getCachedGlobal('footer', 1)()
+  const payload = await getPayload({ config: configPromise })
+  const footerData = await payload.findGlobal({
+    slug: 'footer',
+    depth: 2,
+  })
 
-  const navItems = footerData?.navItems || []
+  const columns = footerData?.columns || []
 
   return (
-    <footer className="mt-auto border-t border-border bg-black dark:bg-card text-white">
-      <div className="container py-8 gap-8 flex flex-col md:flex-row md:justify-between">
-        <Link className="flex items-center" href="/">
-          <Logo />
-        </Link>
+    <footer className="bg-muted/30 border-t py-12 mt-auto">
+      <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
+        {columns.map((col) => (
+          <div key={col.id} className="flex flex-col gap-3">
+            {/* Заголовок колонки футера */}
+            <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">
+              {col.columnTitle}
+            </h3>
 
-        <div className="flex flex-col-reverse items-start md:flex-row gap-4 md:items-center">
-          <ThemeSelector />
-          <nav className="flex flex-col md:flex-row gap-4">
-            {navItems.map(({ link }, i) => {
-              return <CMSLink className="text-white" key={i} {...link} />
-            })}
-          </nav>
-        </div>
+            {/* Список автоматических ссылок */}
+            <ul className="flex flex-col gap-2">
+              {col.links?.map((linkItem) => {
+                let finalUrl = '#'
+
+                if (linkItem.type === 'category' && typeof linkItem.categoryRef === 'object') {
+                  const categoryObj = linkItem.categoryRef as Category
+                  if (categoryObj.breadcrumbs && categoryObj.breadcrumbs.length > 0) {
+                    finalUrl =
+                      categoryObj.breadcrumbs[categoryObj.breadcrumbs.length - 1].url || '#'
+                  }
+                } else if (linkItem.type === 'custom') {
+                  finalUrl = linkItem.url || '#'
+                }
+
+                return (
+                  <li key={linkItem.id}>
+                    <Link
+                      href={finalUrl}
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {linkItem.label}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ))}
       </div>
     </footer>
   )

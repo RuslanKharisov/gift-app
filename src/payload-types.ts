@@ -1642,23 +1642,24 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
-  navItems?:
+  navGroups?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        groupLabel: string;
+        columns?:
+          | {
+              columnTitle?: string | null;
+              links?:
+                | {
+                    label: string;
+                    type?: ('category' | 'custom') | null;
+                    categoryRef?: (number | null) | Category;
+                    url?: string | null;
+                    id?: string | null;
+                  }[]
+                | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -1671,23 +1672,18 @@ export interface Header {
  */
 export interface Footer {
   id: number;
-  navItems?:
+  columns?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        columnTitle: string;
+        links?:
+          | {
+              label: string;
+              type?: ('category' | 'custom') | null;
+              categoryRef?: (number | null) | Category;
+              url?: string | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -1699,17 +1695,24 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
-  navItems?:
+  navGroups?:
     | T
     | {
-        link?:
+        groupLabel?: T;
+        columns?:
           | T
           | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
+              columnTitle?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    type?: T;
+                    categoryRef?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
             };
         id?: T;
       };
@@ -1722,17 +1725,18 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+  columns?:
     | T
     | {
-        link?:
+        columnTitle?: T;
+        links?:
           | T
           | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
               label?: T;
+              type?: T;
+              categoryRef?: T;
+              url?: T;
+              id?: T;
             };
         id?: T;
       };

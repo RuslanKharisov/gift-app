@@ -1,13 +1,16 @@
 'use client'
-import { Header } from '@/payload-types'
+import { Footer } from '@/payload-types'
 import { RowLabelProps, useRowLabel } from '@payloadcms/ui'
+import React from 'react'
 
 export const RowLabel: React.FC<RowLabelProps> = () => {
-  const data = useRowLabel<NonNullable<Header['navItems']>[number]>()
+  // Получаем данные текущей строки из массива columns коллекции Footer
+  const data = useRowLabel<NonNullable<Footer['columns']>[number]>()
 
-  const label = data?.data?.link?.label
-    ? `Nav item ${data.rowNumber !== undefined ? data.rowNumber + 1 : ''}: ${data?.data?.link?.label}`
-    : 'Row'
+  // Если заголовок колонки заполнен, выводим его. Иначе — стандартную заглушку.
+  const label = data?.data?.columnTitle
+    ? `Колонка ${data.rowNumber !== undefined ? data.rowNumber + 1 : ''}: ${data?.data?.columnTitle}`
+    : 'Новая колонка подвала'
 
   return <div>{label}</div>
 }
