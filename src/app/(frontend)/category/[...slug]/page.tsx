@@ -13,7 +13,6 @@ import PageClient from './page.client'
 export const dynamic = 'force-static'
 export const revalidate = 600
 
-// Генерация путей для статической сборки вложенных категорий
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const categories = await payload.find({
@@ -23,14 +22,20 @@ export async function generateStaticParams() {
   })
 
   return categories.docs.map((doc) => {
-    // Если у категории есть сгенерированные крошки, разбиваем их URL на массив сегментов
-    // Из "/category/holidays/23-fevralya" получаем ['holidays', '23-fevralya']
     if (doc.breadcrumbs && doc.breadcrumbs.length > 0) {
-      const urlParts = doc.breadcrumbs[doc.breadcrumbs.length - 1].url
-        ?.replace('/category/', '')
-        ?.split('/')
+      const breadcrumbUrl = doc.breadcrumbs[doc.breadcrumbs.length - 1].url || ''
 
-      return { slug: urlParts || [doc.slug] }
+      const cleanPath = breadcrumbUrl
+        .replace('/category', '')
+        .replace(/\/\/+/g, '/')
+        .replace(/^\/|\/$/g, '')
+
+      if (!cleanPath) {
+        return { slug: [doc.slug] }
+      }
+
+      const urlParts = cleanPath.split('/')
+      return { slug: urlParts }
     }
 
     return { slug: [doc.slug] }
