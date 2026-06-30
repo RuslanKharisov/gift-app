@@ -1818,6 +1818,20 @@ export interface CodeBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PromptBlock".
+ */
+export interface PromptBlock {
+  promptText: string;
+  /**
+   * Параметры, которые нейросеть должна исключить
+   */
+  negativePrompt?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'prompt';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
