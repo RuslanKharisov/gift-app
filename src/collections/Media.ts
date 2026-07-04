@@ -45,6 +45,15 @@ export const Media: CollectionConfig = {
         },
       }),
     },
+    {
+      name: 'creditText',
+      type: 'text',
+      label: 'Источник / Автор фото (SEO)',
+      admin: {
+        description:
+          'Укажите правообладателя, если фото взято со стока (например: "Unsplash / John Doe"). Оставьте пустым для своих фото.',
+      },
+    },
   ],
   upload: {
     // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload

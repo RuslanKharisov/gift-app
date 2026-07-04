@@ -292,6 +292,10 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Укажите правообладателя, если фото взято со стока (например: "Unsplash / John Doe"). Оставьте пустым для своих фото.
+   */
+  creditText?: string | null;
   folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
@@ -1231,6 +1235,7 @@ export interface PostsSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  creditText?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;
