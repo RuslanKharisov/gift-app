@@ -5,16 +5,18 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
+import { cache } from 'react'
 import RichText from '@/components/RichText'
 
-import type { Post } from '@/payload-types'
+import type { Media, Post } from '@/payload-types'
 
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { PostBreadcrumbs } from '@/components/PostBreadcrumbs'
+import { articleSchema, imageSchema } from '@/components/Schema'
+import Script from 'next/script'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -52,34 +54,41 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
+  const schema = [imageSchema(post.meta?.image as Media), articleSchema(post)]
+
   return (
-    <article className="pt-16 pb-16">
-      <PageClient />
+    <>
+      <Script type={'application/ld+json'} strategy={'lazyOnload'}>
+        {JSON.stringify(schema)}
+      </Script>
+      <article className="pt-16 pb-16">
+        <PageClient />
 
-      {/* Allows redirects for valid pages too */}
-      <PayloadRedirects disableNotFound url={url} />
+        {/* Allows redirects for valid pages too */}
+        <PayloadRedirects disableNotFound url={url} />
 
-      {draft && <LivePreviewListener />}
+        {draft && <LivePreviewListener />}
 
-      <div className="container mx-auto">
-        {/* Вставляем хлебные крошки */}
-        <PostBreadcrumbs post={post} />
-      </div>
-
-      <PostHero post={post} />
-
-      <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container">
-          <RichText className="max-w-3xl mx-auto" data={post.content} enableGutter={false} />
-          {post.relatedPosts && post.relatedPosts.length > 0 && (
-            <RelatedPosts
-              className="mt-12 max-w-208 lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={post.relatedPosts.filter((post) => typeof post === 'object')}
-            />
-          )}
+        <div className="container mx-auto">
+          {/* Вставляем хлебные крошки */}
+          <PostBreadcrumbs post={post} />
         </div>
-      </div>
-    </article>
+
+        <PostHero post={post} />
+
+        <div className="flex flex-col items-center gap-4 pt-8">
+          <div className="container">
+            <RichText className="max-w-3xl mx-auto" data={post.content} enableGutter={false} />
+            {post.relatedPosts && post.relatedPosts.length > 0 && (
+              <RelatedPosts
+                className="mt-12 max-w-208 lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
+                docs={post.relatedPosts.filter((post) => typeof post === 'object')}
+              />
+            )}
+          </div>
+        </div>
+      </article>
+    </>
   )
 }
 
