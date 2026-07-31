@@ -54,13 +54,19 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
-  const schema = [imageSchema(post.meta?.image as Media), articleSchema(post)]
+  const schema = [imageSchema(post.meta?.image as Media), articleSchema(post)].filter(Boolean)
 
   return (
     <>
-      <Script type={'application/ld+json'} strategy={'lazyOnload'}>
-        {JSON.stringify(schema)}
-      </Script>
+      {schema.length > 0 && (
+        <Script
+          id={`schema-${post.id || post.slug}`} // Рекомендуется добавлять уникальный id для скриптов в Next.js
+          type="application/ld+json"
+          strategy="lazyOnload"
+        >
+          {JSON.stringify(schema.length === 1 ? schema[0] : schema)}
+        </Script>
+      )}
       <article className="pt-16 pb-16">
         <PageClient />
 
